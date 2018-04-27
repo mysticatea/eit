@@ -1,19 +1,3 @@
-export default function dropWhile<T>(
-    this: IterableIterator<T>,
-    callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => boolean,
-): IterableIterator<T>
-export default function dropWhile<T, U extends T>(
-    this: IterableIterator<T>,
-    callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => element is U,
-): IterableIterator<U>
 export default function dropWhile<T, R>(
     this: IterableIterator<T>,
     callback: (
@@ -24,16 +8,14 @@ export default function dropWhile<T, R>(
     ) => boolean,
     thisArg: R,
 ): IterableIterator<T>
-export default function dropWhile<T, U extends T, R>(
+export default function dropWhile<T>(
     this: IterableIterator<T>,
     callback: (
-        this: R,
         element: T,
         index: number,
         iterator: IterableIterator<T>,
-    ) => element is U,
-    thisArg: R,
-): IterableIterator<U>
+    ) => boolean,
+): IterableIterator<T>
 
 export default function* dropWhile<T>(
     this: IterableIterator<T>,

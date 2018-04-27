@@ -1,11 +1,3 @@
-export default function every<T>(
-    this: IterableIterator<T>,
-    callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => boolean,
-): boolean
 export default function every<T, R>(
     this: IterableIterator<T>,
     callback: (
@@ -15,6 +7,14 @@ export default function every<T, R>(
         iterator: IterableIterator<T>,
     ) => boolean,
     thisArg: R,
+): boolean
+export default function every<T>(
+    this: IterableIterator<T>,
+    callback: (
+        element: T,
+        index: number,
+        iterator: IterableIterator<T>,
+    ) => boolean,
 ): boolean
 
 export default function every<T>(

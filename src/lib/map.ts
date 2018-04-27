@@ -1,7 +1,3 @@
-export default function map<T, U>(
-    this: IterableIterator<T>,
-    callback: (element: T, index: number, iterator: IterableIterator<T>) => U,
-): IterableIterator<U>
 export default function map<T, U, R>(
     this: IterableIterator<T>,
     callback: (
@@ -11,6 +7,10 @@ export default function map<T, U, R>(
         iterator: IterableIterator<T>,
     ) => U,
     thisArg: R,
+): IterableIterator<U>
+export default function map<T, U>(
+    this: IterableIterator<T>,
+    callback: (element: T, index: number, iterator: IterableIterator<T>) => U,
 ): IterableIterator<U>
 
 export default function* map<T, U>(

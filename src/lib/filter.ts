@@ -1,18 +1,12 @@
-export default function filter<T>(
+export default function filter<T, R, U extends T>(
     this: IterableIterator<T>,
     callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => boolean,
-): IterableIterator<T>
-export default function filter<T, U extends T>(
-    this: IterableIterator<T>,
-    callback: (
+        this: R,
         element: T,
         index: number,
         iterator: IterableIterator<T>,
     ) => element is U,
+    thisArg: R,
 ): IterableIterator<U>
 export default function filter<T, R>(
     this: IterableIterator<T>,
@@ -24,16 +18,22 @@ export default function filter<T, R>(
     ) => boolean,
     thisArg: R,
 ): IterableIterator<T>
-export default function filter<T, U extends T, R>(
+export default function filter<T, U extends T>(
     this: IterableIterator<T>,
     callback: (
-        this: R,
         element: T,
         index: number,
         iterator: IterableIterator<T>,
     ) => element is U,
-    thisArg: R,
 ): IterableIterator<U>
+export default function filter<T>(
+    this: IterableIterator<T>,
+    callback: (
+        element: T,
+        index: number,
+        iterator: IterableIterator<T>,
+    ) => boolean,
+): IterableIterator<T>
 
 export default function* filter<T>(
     this: IterableIterator<T>,

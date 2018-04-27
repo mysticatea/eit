@@ -20,10 +20,7 @@ import toArray from "./lib/to-array"
 import toMap from "./lib/to-map"
 import toObject from "./lib/to-object"
 import toSet from "./lib/to-set"
-
-function property(value: any): PropertyDescriptor {
-    return { value, configurable: true, writable: true }
-}
+import { property } from "./utils"
 
 const IteratorPrototype = Object.getPrototypeOf(
     Object.getPrototypeOf([][Symbol.iterator]()),
@@ -54,20 +51,6 @@ Object.defineProperties(IteratorPrototype, {
 
 declare global {
     interface IterableIterator<T> {
-        dropWhile(
-            callback: (
-                element: T,
-                index: number,
-                iterator: IterableIterator<T>,
-            ) => boolean,
-        ): IterableIterator<T>
-        dropWhile<U extends T>(
-            callback: (
-                element: T,
-                index: number,
-                iterator: IterableIterator<T>,
-            ) => element is U,
-        ): IterableIterator<U>
         dropWhile<R>(
             callback: (
                 this: R,
@@ -77,23 +60,14 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): IterableIterator<T>
-        dropWhile<U extends T, R>(
-            callback: (
-                this: R,
-                element: T,
-                index: number,
-                iterator: IterableIterator<T>,
-            ) => element is U,
-            thisArg: R,
-        ): IterableIterator<U>
-        drop(count: number): IterableIterator<T>
-        every(
+        dropWhile(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => boolean,
-        ): boolean
+        ): IterableIterator<T>
+        drop(count: number): IterableIterator<T>
         every<R>(
             callback: (
                 this: R,
@@ -103,19 +77,21 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): boolean
-        filter(
+        every(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => boolean,
-        ): IterableIterator<T>
-        filter<U extends T>(
+        ): boolean
+        filter<R, U extends T>(
             callback: (
+                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
+            thisArg: R,
         ): IterableIterator<U>
         filter<R>(
             callback: (
@@ -126,22 +102,20 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): IterableIterator<T>
-        filter<U extends T, R>(
+        filter<U extends T>(
             callback: (
-                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
-            thisArg: R,
         ): IterableIterator<U>
-        findIndex(
+        filter(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => boolean,
-        ): number
+        ): IterableIterator<T>
         findIndex<R>(
             callback: (
                 this: R,
@@ -151,19 +125,21 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): number
-        find(
+        findIndex(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => boolean,
-        ): T | undefined
-        find<U extends T>(
+        ): number
+        find<R, U extends T>(
             callback: (
+                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
+            thisArg: R,
         ): U | undefined
         find<R>(
             callback: (
@@ -174,22 +150,20 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): T | undefined
-        find<U extends T, R>(
+        find<U extends T>(
             callback: (
-                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
-            thisArg: R,
         ): U | undefined
-        forEach(
+        find(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
-            ) => void,
-        ): void
+            ) => boolean,
+        ): T | undefined
         forEach<R>(
             callback: (
                 this: R,
@@ -199,16 +173,16 @@ declare global {
             ) => void,
             thisArg: R,
         ): void
-        includes(searchElement: T, fromIndex?: number): boolean
-        indexOf(searchElement: T, fromIndex?: number): number
-        join(separator?: string): string
-        map<U>(
+        forEach(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
-            ) => U,
-        ): IterableIterator<U>
+            ) => void,
+        ): void
+        includes(searchElement: T, fromIndex?: number): boolean
+        indexOf(searchElement: T, fromIndex?: number): number
+        join(separator?: string): string
         map<U, R>(
             callback: (
                 this: R,
@@ -217,6 +191,13 @@ declare global {
                 iterator: IterableIterator<T>,
             ) => U,
             thisArg: R,
+        ): IterableIterator<U>
+        map<U>(
+            callback: (
+                element: T,
+                index: number,
+                iterator: IterableIterator<T>,
+            ) => U,
         ): IterableIterator<U>
         reduce<U extends T>(
             callback: (
@@ -236,14 +217,7 @@ declare global {
             ) => T,
         ): T
         reverse(): IterableIterator<T>
-        slice(start: number, end: number): IterableIterator<T>
-        some(
-            callback: (
-                element: T,
-                index: number,
-                iterator: IterableIterator<T>,
-            ) => boolean,
-        ): boolean
+        slice(start?: number, end?: number): IterableIterator<T>
         some<R>(
             callback: (
                 this: R,
@@ -253,19 +227,21 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): boolean
-        takeWhile(
+        some(
             callback: (
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => boolean,
-        ): IterableIterator<T>
-        takeWhile<U extends T>(
+        ): boolean
+        takeWhile<R, U extends T>(
             callback: (
+                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
+            thisArg: R,
         ): IterableIterator<U>
         takeWhile<R>(
             callback: (
@@ -276,15 +252,20 @@ declare global {
             ) => boolean,
             thisArg: R,
         ): IterableIterator<T>
-        takeWhile<U extends T, R>(
+        takeWhile<U extends T>(
             callback: (
-                this: R,
                 element: T,
                 index: number,
                 iterator: IterableIterator<T>,
             ) => element is U,
-            thisArg: R,
         ): IterableIterator<U>
+        takeWhile(
+            callback: (
+                element: T,
+                index: number,
+                iterator: IterableIterator<T>,
+            ) => boolean,
+        ): IterableIterator<T>
         take(count: number): IterableIterator<T>
         toArray(): Array<T>
         toSet(): Set<T>

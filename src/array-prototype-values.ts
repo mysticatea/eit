@@ -1,11 +1,9 @@
 if (Array.prototype.values === undefined) {
-    Object.defineProperty(Array.prototype, "values", {
-        value: function values(this: Array<any>) {
-            return this[Symbol.iterator]()
-        },
-        configurable: true,
-        writable: true,
-    })
+    Object.defineProperty(
+        Array.prototype,
+        "values",
+        Object.getOwnPropertyDescriptor(Array.prototype, Symbol.iterator)!,
+    )
 }
 
 export {}

@@ -1,18 +1,12 @@
-export default function find<T>(
+export default function find<T, R, U extends T>(
     this: IterableIterator<T>,
     callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => boolean,
-): T | undefined
-export default function find<T, U extends T>(
-    this: IterableIterator<T>,
-    callback: (
+        this: R,
         element: T,
         index: number,
         iterator: IterableIterator<T>,
     ) => element is U,
+    thisArg: R,
 ): U | undefined
 export default function find<T, R>(
     this: IterableIterator<T>,
@@ -24,16 +18,22 @@ export default function find<T, R>(
     ) => boolean,
     thisArg: R,
 ): T | undefined
-export default function find<T, U extends T, R>(
+export default function find<T, U extends T>(
     this: IterableIterator<T>,
     callback: (
-        this: R,
         element: T,
         index: number,
         iterator: IterableIterator<T>,
     ) => element is U,
-    thisArg: R,
 ): U | undefined
+export default function find<T>(
+    this: IterableIterator<T>,
+    callback: (
+        element: T,
+        index: number,
+        iterator: IterableIterator<T>,
+    ) => boolean,
+): T | undefined
 
 export default function find<T>(
     this: IterableIterator<T>,

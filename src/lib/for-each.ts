@@ -1,11 +1,3 @@
-export default function forEach<T>(
-    this: IterableIterator<T>,
-    callback: (
-        element: T,
-        index: number,
-        iterator: IterableIterator<T>,
-    ) => void,
-): void
 export default function forEach<T, R>(
     this: IterableIterator<T>,
     callback: (
@@ -15,6 +7,14 @@ export default function forEach<T, R>(
         iterator: IterableIterator<T>,
     ) => void,
     thisArg: R,
+): void
+export default function forEach<T>(
+    this: IterableIterator<T>,
+    callback: (
+        element: T,
+        index: number,
+        iterator: IterableIterator<T>,
+    ) => void,
 ): void
 
 export default function forEach<T>(

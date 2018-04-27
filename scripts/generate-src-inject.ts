@@ -62,10 +62,7 @@ for (const filename of fs.readdirSync(libRoot)) {
 const linter = new eslint.CLIEngine({ fix: true })
 const code = `/* DON'T EDIT THIS FILE; THIS IS AUTO-GENERATED. */
 ${filenames.map(toImportDeclarations).join("\n")}
-
-function property(value: any): PropertyDescriptor {
-    return { value, configurable: true, writable: true }
-}
+import { property } from "./utils"
 
 const IteratorPrototype = Object.getPrototypeOf(
     Object.getPrototypeOf([][Symbol.iterator]()),
